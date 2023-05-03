@@ -1,37 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, StyleSheet } from "react-native";
-import { Stack, useSearchParams } from "expo-router";
-import axios from "axios";
-import LoadingIndicator from "../components/LoadingIndicator";
-import ScreenHeaderBtn from "../components/ScreenHeaderBtn";
-import Menu from "../assets/menu.png";
-import Profile from "../assets/profile.png";
-import Home from "../assets/home.png";
+import axios from 'axios';
+import {Stack, useSearchParams} from 'expo-router';
+import React, {useEffect, useState} from 'react';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+
+import Home from '../assets/home.png';
+import Menu from '../assets/menu.png';
+import Profile from '../assets/profile.png';
+import LoadingIndicator from '../components/LoadingIndicator';
+import OptionMenu from '../components/OptionMenu';
+import ScreenHeaderBtn from '../components/ScreenHeaderBtn';
 
 const dashboard = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(null);
-  const { ip } = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('default');
+  const [data, setData] = useState('Hello');
+  const {ip} = useSearchParams();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.post(`http://${ip}/data`, {
-          data: "get-info",
-        });
-        console.log(response.data); // Do something with the response
-        setData(response.data.param1);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.post(`http://${ip}/data`, {
+  //         data: "get-info",
+  //       });
+  //       console.log(response.data); // Do something with the response
+  //       setData(response.data.param1);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    if (ip) {
-      console.log(ip);
-      fetchData();
-    }
-  }, []);
+  //   if (ip) {
+  //     console.log(ip);
+  //     fetchData();
+  //   }
+  // }, []);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -44,16 +47,37 @@ const dashboard = () => {
   //   fetchData();
   // }, []);
 
+
+  const handleButtonPress = (buttonId) => {
+    switch (buttonId) {
+      case '1':
+        axios.post(`http://${ip}/data`, {data: buttonId})
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error));
+        break;
+      case '2':
+        axios.post(`http://${ip}/data`, {data: buttonId})
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error));
+        break;
+      case '3':
+        axios.post(`http://${ip}/data`, {data: buttonId})
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error));
+        break;
+      // Add cases for other button IDs here
+      default:
+        console.log(`Unknown button ID: ${buttonId}`);
+    }
+  };
+
   return (
     <>
       {isLoading ? (
         <>
           <Stack.Screen
-            options={{
-              headerTransparent: true,
-              headerShadowVisible: false,
-              headerTitle: "",
-            }}
+            options={
+    { headerTransparent: true, headerShadowVisible: false, headerTitle: '', }}
           />
           <LoadingIndicator />
         </>
@@ -80,14 +104,26 @@ const dashboard = () => {
             }}
           />
           <View style={styles.contentContainer}>
-            <Text style={styles.text}>Avaliable Devices</Text>
-            <Text style={styles.text}>{data}</Text>
+            <Text style={styles.text}>Avaliable Devices :</Text>
+            <Text style={styles.text}>STM32F429I</Text>
+            <OptionMenu onPressButton={
+    handleButtonPress}/>
+
+            {/* Render a component based on the selected option */}
+            {selectedOption && (
+              <>
+                {selectedOption === "default" && <></>}
+                {selectedOption === 'default' && <></>}
+                {selectedOption === "default" && <></>}
+                {selectedOption === 'default' && <></>}
+              </>
+            )}
 
             <View style={styles.footer}>
-              <ScreenHeaderBtn iconUrl={Home} dimension="60%" />
-              <ScreenHeaderBtn iconUrl={Menu} dimension="80%" />
-              <ScreenHeaderBtn iconUrl={Menu} dimension="80%" />
-              <ScreenHeaderBtn iconUrl={Menu} dimension="80%" />
+              <ScreenHeaderBtn iconUrl={Home} dimension='60%' />
+              <ScreenHeaderBtn iconUrl={Menu} dimension='80%' />
+              <ScreenHeaderBtn iconUrl={Menu} dimension='80%' />
+              <ScreenHeaderBtn iconUrl={Menu} dimension='80%' />
             </View>
           </View>
         </SafeAreaView>
@@ -99,26 +135,26 @@ const dashboard = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#202326",
+    backgroundColor: '#202326',
   },
   contentContainer: {
     flex: 1,
-    marginTop: 125,
+    marginTop: 40,
     paddingHorizontal: 20,
-    backgroundColor: "#202326",
+    backgroundColor: '#202326',
   },
   footer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 25,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     left: 40,
     right: 40,
   },
   text: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#fff",
+    fontWeight: 'bold',
+    color: '#fff',
   },
   headerButtonWrapper: {
     marginVertical: 15,
