@@ -39,7 +39,7 @@ const Home = () => {
             style={styles.input}
             value={inputText}
             onChangeText={handleInputChange}
-            placeholder="Enter text..."
+            placeholder="Enter IP address....."
             placeholderTextColor="gray"
             color="white"
           />
