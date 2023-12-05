@@ -1,18 +1,40 @@
-import axios from 'axios';
-import {Stack, useSearchParams} from 'expo-router';
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import axios from "axios";
+import { Stack, useSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+  TouchableOpacity,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  Image,
+  View,
+} from "react-native";
 
-import Home from '../assets/home.png';
-import Menu from '../assets/menu.png';
-import Profile from '../assets/profile.png';
-import {DownloadLatestVER, FileList, LoadingIndicator, OptionMenu, ScreenHeaderBtn, SendFile,} from '../components';
+import Home from "../assets/home.png";
+import Menu from "../assets/menu.png";
+import Profile from "../assets/profile.png";
+import {
+  DownloadLatestVER,
+  FileList,
+  LoadingIndicator,
+  OptionMenu,
+  ScreenHeaderBtn,
+  SendFile,
+} from "../components";
+
+// Import arrow icons or use your own images
+
+import rightArrow from "../assets/right-arrow.png";
+import leftArrow from "../assets/left-arrow.png";
+import upArrow from "../assets/up-arrow.png";
+import downArrow from "../assets/down-arrow.png";
+import Stop from "../assets/stop-button.png";
 
 const dashboard = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [fetching, setIsFetching] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('default');
-  const [data, setData] = useState('');
+  const [selectedOption, setSelectedOption] = useState("default");
+  const [data, setData] = useState("");
   const [files, setFiles] = useState([]);
   const { ip } = useSearchParams();
 
@@ -20,7 +42,7 @@ const dashboard = () => {
     const fetchData = async () => {
       try {
         const response = await axios.post(`http://${ip}/data`, {
-          data: 'get-info',
+          data: "get-info",
         });
         console.log(response.data); // Do something with the response
         setData(response.data.response);
@@ -32,38 +54,38 @@ const dashboard = () => {
 
     if (ip) {
       console.log(ip);
-      fetchData();
+      //  fetchData();
     }
   }, []);
 
   const handleButtonPress = (buttonId) => {
     switch (buttonId) {
-      case '1':
+      case "1":
         axios
-          .post(`http://${ip}/data`, { data: 'list-files' })
+          .post(`http://${ip}/data`, { data: "list-files" })
           .then((response) => {
             setFiles(response.data.files);
-            setSelectedOption('list-files');
+            setSelectedOption("list-files");
           })
           .catch((error) => console.error(error));
         break;
-      case '2':
+      case "2":
         axios
-          .post(`http://${ip}/data`, { data: 'delete-files' })
+          .post(`http://${ip}/data`, { data: "delete-files" })
           .then((response) => {
             console.log(response.data);
-            setSelectedOption('delete-files');
-            alert('Files Deleted');
+            setSelectedOption("delete-files");
+            alert("Files Deleted");
           })
           .catch((error) => console.error(error));
         break;
-      case '3':
+      case "3":
         setIsFetching(true);
-        setSelectedOption('download-file');
+        setSelectedOption("download-file");
         axios
           .post(
             `http://${ip}/data`,
-            { data: 'download-file' },
+            { data: "download-file" },
             { timeout: 8000 }
           )
           .then((response) => {
@@ -72,13 +94,13 @@ const dashboard = () => {
           })
           .catch((error) => console.error(error));
         break;
-      case '4':
+      case "4":
         setIsFetching(true);
-        setSelectedOption('send-binary');
+        setSelectedOption("send-binary");
         axios
           .post(
             `http://${ip}/data`,
-            { data: 'send-binary' },
+            { data: "send-binary" },
             { timeout: 30000 }
           )
           .then((response) => {
@@ -100,7 +122,7 @@ const dashboard = () => {
             options={{
               headerTransparent: true,
               headerShadowVisible: false,
-              headerTitle: '',
+              headerTitle: "",
             }}
           />
           <LoadingIndicator />
@@ -137,20 +159,95 @@ const dashboard = () => {
             {/* Render a component based on the selected option */}
             {selectedOption && (
               <>
-                {selectedOption === 'list-files' && <FileList files={files} />}
+                {selectedOption === "list-files" && <FileList files={files} />}
                 {selectedOption === "download-file" && (
                   <DownloadLatestVER fetching={fetching}></DownloadLatestVER>
                 )}
-                {selectedOption === 'delete-file' && <></>}
-                {selectedOption === "send-binary" && <SendFile fetching={fetching}></SendFile>}
+                {selectedOption === "delete-file" && <></>}
+                {selectedOption === "send-binary" && (
+                  <SendFile fetching={fetching}></SendFile>
+                )}
               </>
             )}
 
+            <View style={styles.containerButtons}>
+              {/* Keypad or joystick buttons */}
+              <View style={styles.keypad}>
+                {/* First Row: Up Arrow */}
+                <View style={styles.directionButtonRow}>
+                  <TouchableOpacity
+                    style={[styles.directionButton]}
+                    onPress={() => {
+                      // Handle the action when the "Up" button is pressed
+                      // Send a command to move the car forward, for example
+                    }}
+                  >
+                    <Image source={upArrow} style={{ width: 40, height: 40 }} />
+                  </TouchableOpacity>
+                </View>
+
+                {/* Second Row: Left and Right Arrows */}
+                <View style={styles.directionButtonRow}>
+                  <TouchableOpacity
+                    style={[styles.directionButton, styles.leftArrowButton]}
+                    onPress={() => {
+                      // Handle the action when the "Left" button is pressed
+                      // Send a command to turn the car left, for example
+                    }}
+                  >
+                    <Image
+                      source={leftArrow}
+                      style={{ width: 40, height: 40 }}
+                    />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[styles.directionButton]}
+                    onPress={() => {
+                      // Handle the action when the "Right" button is pressed
+                      // Send a command to turn the car right, for example
+                    }}
+                  >
+                    <Image source={Stop} style={{ width: 40, height: 40 }} />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[styles.directionButton, styles.rightArrowButton]}
+                    onPress={() => {
+                      // Handle the action when the "Right" button is pressed
+                      // Send a command to turn the car right, for example
+                    }}
+                  >
+                    <Image
+                      source={rightArrow}
+                      style={{ width: 40, height: 40 }}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                {/* Third Row: Down Arrow */}
+                <View style={styles.directionButtonRow}>
+                  <TouchableOpacity
+                    style={[styles.directionButton]}
+                    onPress={() => {
+                      // Handle the action when the "Down" button is pressed
+                      // Send a command to move the car backward, for example
+                    }}
+                  >
+                    <Image
+                      source={downArrow}
+                      style={{ width: 40, height: 40 }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+
             <View style={styles.footer}>
               <ScreenHeaderBtn iconUrl={Home} dimension="60%" />
-              <ScreenHeaderBtn iconUrl={Menu} dimension='80%' />
-              <ScreenHeaderBtn iconUrl={Menu} dimension='80%' />
-              <ScreenHeaderBtn iconUrl={Menu} dimension='80%' />
+              <ScreenHeaderBtn iconUrl={Menu} dimension="80%" />
+              <ScreenHeaderBtn iconUrl={Menu} dimension="80%" />
+              <ScreenHeaderBtn iconUrl={Menu} dimension="80%" />
             </View>
           </View>
         </SafeAreaView>
@@ -162,34 +259,79 @@ const dashboard = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#202326',
+    backgroundColor: "#202326",
+  },
+  containerButtons: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   contentContainer: {
     flex: 1,
-    marginTop: 125,
+    marginTop: 20,
     paddingHorizontal: 20,
-    backgroundColor: '#202326',
+    backgroundColor: "#202326",
   },
   data: {
     fontSize: 14,
-    color: '#999999',
-    fontStyle: 'italic',
+    color: "#999999",
+    fontStyle: "italic",
   },
   footer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 25,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     left: 40,
     right: 40,
   },
+  leftArrowButton: {
+    marginRight: 10, // Add margin to the right for the left arrow button
+  },
+  rightArrowButton: {
+    marginLeft: 10, // Add margin to the left for the right arrow button
+  },
   text: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
   },
   headerButtonWrapper: {
     marginVertical: 15,
+  },
+  keypad: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  directionButtonRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  directionButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    backgroundColor: "#3498db",
+    margin: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  upArrow: {},
+  leftArrow: {
+    paddingRight: 10,
+  },
+  rightArrow: {
+    transform: [{ rotate: "90deg" }], // rotate right 90 degrees
+  },
+  downArrow: {
+    transform: [{ rotate: "180deg" }], // rotate down 180 degrees
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 18,
   },
 });
 
