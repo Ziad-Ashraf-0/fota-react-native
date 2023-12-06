@@ -58,6 +58,30 @@ const dashboard = () => {
     }
   }, []);
 
+  const handleDirButtonPress = (direction, rightSpeed, leftSpeed) => {
+    // Define your API endpoint
+    const apiUrl = `http://${ip}/move`;
+
+    // Create the request body
+    const requestBody = {
+      direction,
+      rightSpeed,
+      leftSpeed,
+    };
+
+    // Make the Axios POST request
+    axios
+      .post(apiUrl, requestBody)
+      .then((response) => {
+        // Handle success, if needed
+        console.log("Request successful", response.data);
+      })
+      .catch((error) => {
+        // Handle error, if needed
+        console.error("Error making request", error);
+      });
+  };
+
   const handleButtonPress = (buttonId) => {
     switch (buttonId) {
       case "1":
@@ -178,8 +202,7 @@ const dashboard = () => {
                   <TouchableOpacity
                     style={[styles.directionButton]}
                     onPress={() => {
-                      // Handle the action when the "Up" button is pressed
-                      // Send a command to move the car forward, for example
+                      handleDirButtonPress("forward", 100, 100);
                     }}
                   >
                     <Image source={upArrow} style={{ width: 40, height: 40 }} />
@@ -191,8 +214,7 @@ const dashboard = () => {
                   <TouchableOpacity
                     style={[styles.directionButton, styles.leftArrowButton]}
                     onPress={() => {
-                      // Handle the action when the "Left" button is pressed
-                      // Send a command to turn the car left, for example
+                      handleDirButtonPress("left", 50, 100);
                     }}
                   >
                     <Image
@@ -204,8 +226,7 @@ const dashboard = () => {
                   <TouchableOpacity
                     style={[styles.directionButton]}
                     onPress={() => {
-                      // Handle the action when the "Right" button is pressed
-                      // Send a command to turn the car right, for example
+                      handleDirButtonPress("stop", 0, 0);
                     }}
                   >
                     <Image source={Stop} style={{ width: 40, height: 40 }} />
@@ -214,8 +235,7 @@ const dashboard = () => {
                   <TouchableOpacity
                     style={[styles.directionButton, styles.rightArrowButton]}
                     onPress={() => {
-                      // Handle the action when the "Right" button is pressed
-                      // Send a command to turn the car right, for example
+                      handleDirButtonPress("right", 50, 100);
                     }}
                   >
                     <Image
@@ -230,8 +250,7 @@ const dashboard = () => {
                   <TouchableOpacity
                     style={[styles.directionButton]}
                     onPress={() => {
-                      // Handle the action when the "Down" button is pressed
-                      // Send a command to move the car backward, for example
+                      handleDirButtonPress("back", 50, 100);
                     }}
                   >
                     <Image
