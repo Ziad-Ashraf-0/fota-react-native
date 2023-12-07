@@ -31,7 +31,7 @@ import downArrow from "../assets/down-arrow.png";
 import Stop from "../assets/stop-button.png";
 
 const dashboard = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [fetching, setIsFetching] = useState(false);
   const [selectedOption, setSelectedOption] = useState("default");
   const [data, setData] = useState("");
@@ -54,7 +54,7 @@ const dashboard = () => {
 
     if (ip) {
       console.log(ip);
-      //  fetchData();
+      fetchData();
     }
   }, []);
 
@@ -202,7 +202,7 @@ const dashboard = () => {
                   <TouchableOpacity
                     style={[styles.directionButton]}
                     onPress={() => {
-                      handleDirButtonPress("forward", 100, 100);
+                      handleDirButtonPress(0x77, 100, 100);
                     }}
                   >
                     <Image source={upArrow} style={{ width: 40, height: 40 }} />
@@ -214,7 +214,7 @@ const dashboard = () => {
                   <TouchableOpacity
                     style={[styles.directionButton, styles.leftArrowButton]}
                     onPress={() => {
-                      handleDirButtonPress("left", 50, 100);
+                      handleDirButtonPress(0xAB, 50, 100);
                     }}
                   >
                     <Image
@@ -226,7 +226,7 @@ const dashboard = () => {
                   <TouchableOpacity
                     style={[styles.directionButton]}
                     onPress={() => {
-                      handleDirButtonPress("stop", 0, 0);
+                      handleDirButtonPress(0xCC, 0, 0);
                     }}
                   >
                     <Image source={Stop} style={{ width: 40, height: 40 }} />
@@ -235,7 +235,7 @@ const dashboard = () => {
                   <TouchableOpacity
                     style={[styles.directionButton, styles.rightArrowButton]}
                     onPress={() => {
-                      handleDirButtonPress("right", 50, 100);
+                      handleDirButtonPress(0x80, 50, 100);
                     }}
                   >
                     <Image
@@ -250,7 +250,7 @@ const dashboard = () => {
                   <TouchableOpacity
                     style={[styles.directionButton]}
                     onPress={() => {
-                      handleDirButtonPress("back", 50, 100);
+                      handleDirButtonPress(0x79, 50, 100);
                     }}
                   >
                     <Image
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    marginTop: 20,
+    marginTop: 120,
     paddingHorizontal: 20,
     backgroundColor: "#202326",
   },
